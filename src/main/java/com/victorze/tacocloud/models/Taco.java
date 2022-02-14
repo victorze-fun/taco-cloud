@@ -23,12 +23,12 @@ public class Taco {
     private Long id;
 
     @NotNull
-    @Size(min=5, message="Name must be at least 5 characters long")
+    @Size(min = 5, message = "Name must be at least 5 characters long")
     private String name;
 
     private Date createdAt = new Date();
 
-    @Size(min=1, message="You must choose at least 1 ingredient")
+    @Size(min = 1, message = "You must choose at least 1 ingredient")
     @ManyToMany()
     private List<Ingredient> ingredients = new ArrayList<>();
 
