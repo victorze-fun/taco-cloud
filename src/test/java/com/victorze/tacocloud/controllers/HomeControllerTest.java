@@ -5,13 +5,17 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
+
+import com.victorze.tacocloud.config.WebConfig;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest()
+@WebMvcTest(WebConfig.class)
 public class HomeControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -22,4 +26,5 @@ public class HomeControllerTest {
                 .andExpect(view().name("home"))
                 .andExpect(content().string(containsString("Welcome to...")));
     }
+
 }
