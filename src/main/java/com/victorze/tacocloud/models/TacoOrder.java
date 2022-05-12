@@ -1,16 +1,17 @@
 package com.victorze.tacocloud.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -21,7 +22,7 @@ import lombok.Data;
 
 @Data
 @Entity
-public class TacoOrder {
+public class TacoOrder implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -29,7 +30,7 @@ public class TacoOrder {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private Date placedAt = new Date();
+    private Date placedAt;
 
     @NotBlank(message = "Delivery name is required")
     private String deliveryName;
@@ -58,11 +59,16 @@ public class TacoOrder {
     @ManyToOne
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(targetEntity = Taco.class)
     private List<Taco> tacos = new ArrayList<>();
 
-    public void addTaco(Taco taco) {
-        this.tacos.add(taco);
+    public void addTaco(Taco design) {
+        this.tacos.add(design);
+    }
+
+    @PrePersist
+    void placedAt() {
+        this.placedAt = new Date();
     }
 
 }
