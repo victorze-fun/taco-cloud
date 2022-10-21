@@ -9,8 +9,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
@@ -59,11 +59,11 @@ public class TacoOrder implements Serializable {
     @ManyToOne
     private User user;
 
-    @ManyToMany(targetEntity = Taco.class)
+    @OneToMany(mappedBy = "order")
     private List<Taco> tacos = new ArrayList<>();
 
-    public void addTaco(Taco design) {
-        this.tacos.add(design);
+    public void addTaco(Taco taco) {
+        this.tacos.add(taco);
     }
 
     @PrePersist
