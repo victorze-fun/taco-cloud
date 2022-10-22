@@ -18,11 +18,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.victorze.tacocloud.models.Ingredient;
 import com.victorze.tacocloud.models.Ingredient.Type;
-import com.victorze.tacocloud.models.Taco;
 import com.victorze.tacocloud.models.Order;
+import com.victorze.tacocloud.models.Taco;
 import com.victorze.tacocloud.models.User;
 import com.victorze.tacocloud.repositories.IngredientRepository;
-import com.victorze.tacocloud.repositories.TacoRepository;
 import com.victorze.tacocloud.repositories.UserRepository;
 
 import lombok.extern.slf4j.Slf4j;
@@ -35,14 +34,10 @@ public class DesignTacoController {
     
     private final IngredientRepository ingredientRepository;
 
-    private TacoRepository tacoRepository;
-
     private UserRepository userRepository;
 
-    public DesignTacoController(IngredientRepository ingredientRepository, 
-            TacoRepository tacoRepository, UserRepository userRepository) {
+    public DesignTacoController(IngredientRepository ingredientRepository, UserRepository userRepository) {
         this.ingredientRepository = ingredientRepository;
-        this.tacoRepository = tacoRepository;
         this.userRepository = userRepository;
     }
 
@@ -88,8 +83,7 @@ public class DesignTacoController {
             return "design";
         }
 
-        Taco saved = tacoRepository.save(taco);
-        order.addTaco(saved);
+        order.addTaco(taco);
         
         return "redirect:/orders/current";
     }

@@ -16,8 +16,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
 import com.victorze.tacocloud.models.Order;
+import com.victorze.tacocloud.models.Taco;
 import com.victorze.tacocloud.models.User;
 import com.victorze.tacocloud.repositories.OrderRepository;
+import com.victorze.tacocloud.repositories.TacoRepository;
 
 @Controller
 @SessionAttributes("order")
@@ -25,11 +27,14 @@ import com.victorze.tacocloud.repositories.OrderRepository;
 public class OrderController {
 
     private OrderRepository orderRepository;
+    
+    private TacoRepository tacoRepository;
 
     private OrderProps props;
 
-    public OrderController(OrderRepository orderRepository, OrderProps props) {
+    public OrderController(OrderRepository orderRepository, TacoRepository tacoRepository, OrderProps props) {
         this.orderRepository = orderRepository;
+        this.tacoRepository = tacoRepository;
         this.props = props;
     }
 
@@ -64,6 +69,12 @@ public class OrderController {
         order.setUser(user);
 
         orderRepository.save(order);
+        
+        for (Taco taco : order.getTacos()) {
+            taco.setOrder(order);
+            tacoRepository.save(taco);
+        }
+        
         sessionStatus.setComplete();
 
         return "redirect:/";
