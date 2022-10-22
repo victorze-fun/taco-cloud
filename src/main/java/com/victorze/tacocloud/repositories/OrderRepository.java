@@ -2,14 +2,14 @@ package com.victorze.tacocloud.repositories;
 
 import java.util.List;
 
-import com.victorze.tacocloud.models.TacoOrder;
-import com.victorze.tacocloud.models.User;
-
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.repository.CrudRepository;
 
-public interface OrderRepository extends CrudRepository<TacoOrder, Long> {
+import com.victorze.tacocloud.models.Order;
+import com.victorze.tacocloud.models.User;
 
-    List<TacoOrder> findByUserOrderByPlacedAtDesc(User user, Pageable pageable);
+public interface OrderRepository extends CrudRepository<Order, Long> {
+
+    List<Order> findByUserOrderByPlacedAtDesc(User user, Pageable pageable);
 
 }

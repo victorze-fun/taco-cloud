@@ -1,8 +1,8 @@
 package com.victorze.tacocloud.repositories;
 
-import com.victorze.tacocloud.models.User;
-
 import org.springframework.data.repository.CrudRepository;
+
+import com.victorze.tacocloud.models.User;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 

@@ -2,10 +2,6 @@ package com.victorze.tacocloud.controllers;
 
 import javax.validation.Valid;
 
-import com.victorze.tacocloud.models.TacoOrder;
-import com.victorze.tacocloud.models.User;
-import com.victorze.tacocloud.repositories.OrderRepository;
-
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,22 +15,26 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
 
+import com.victorze.tacocloud.models.Order;
+import com.victorze.tacocloud.models.User;
+import com.victorze.tacocloud.repositories.OrderRepository;
+
 @Controller
-@RequestMapping("/orders")
 @SessionAttributes("order")
+@RequestMapping("/orders")
 public class OrderController {
 
-    private OrderRepository orderRepo;
+    private OrderRepository orderRepository;
 
     private OrderProps props;
 
-    public OrderController(OrderRepository orderRepo, OrderProps props) {
-        this.orderRepo = orderRepo;
+    public OrderController(OrderRepository orderRepository, OrderProps props) {
+        this.orderRepository = orderRepository;
         this.props = props;
     }
 
     @GetMapping("/current")
-    public String orderForm(@AuthenticationPrincipal User user, @ModelAttribute TacoOrder order) {
+    public String orderForm(@AuthenticationPrincipal User user, @ModelAttribute Order order) {
         if (order.getDeliveryName() == null) {
             order.setDeliveryName(user.getFullname());
         }
@@ -55,15 +55,15 @@ public class OrderController {
     }
 
     @PostMapping
-    public String processOrder(@Valid TacoOrder order, Errors errors,
+    public String processOrder(@Valid Order order, Errors errors,
             SessionStatus sessionStatus, @AuthenticationPrincipal User user) {
         if (errors.hasErrors()) {
             return "orderForm";
         }
-
+        
         order.setUser(user);
 
-        orderRepo.save(order);
+        orderRepository.save(order);
         sessionStatus.setComplete();
 
         return "redirect:/";
@@ -72,7 +72,7 @@ public class OrderController {
     @GetMapping
     public String ordersForUser(@AuthenticationPrincipal User user, Model model) {
         Pageable pageable = PageRequest.of(0, props.getPageSize());
-        model.addAttribute("orders", orderRepo.findByUserOrderByPlacedAtDesc(user, pageable));
+        model.addAttribute("orders", orderRepository.findByUserOrderByPlacedAtDesc(user, pageable));
         return "orderList";
     }
 

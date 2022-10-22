@@ -12,6 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
+import javax.persistence.Table;
 import javax.validation.constraints.Digits;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
@@ -22,7 +23,8 @@ import lombok.Data;
 
 @Data
 @Entity
-public class TacoOrder implements Serializable {
+@Table(name="taco_order")
+public class Order implements Serializable {
 
     private static final long serialVersionUID = 1L;
 

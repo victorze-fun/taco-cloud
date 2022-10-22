@@ -7,16 +7,6 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
-import com.victorze.tacocloud.models.Ingredient;
-import com.victorze.tacocloud.models.Ingredient.Type;
-import com.victorze.tacocloud.models.Taco;
-import com.victorze.tacocloud.models.TacoOrder;
-import com.victorze.tacocloud.models.User;
-import com.victorze.tacocloud.repositories.IngredientRepository;
-import com.victorze.tacocloud.repositories.TacoRepository;
-import com.victorze.tacocloud.repositories.UserRepository;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -26,31 +16,40 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.victorze.tacocloud.models.Ingredient;
+import com.victorze.tacocloud.models.Ingredient.Type;
+import com.victorze.tacocloud.models.Taco;
+import com.victorze.tacocloud.models.Order;
+import com.victorze.tacocloud.models.User;
+import com.victorze.tacocloud.repositories.IngredientRepository;
+import com.victorze.tacocloud.repositories.TacoRepository;
+import com.victorze.tacocloud.repositories.UserRepository;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@RequestMapping("/design")
 @SessionAttributes("order")
+@RequestMapping("/design")
 public class DesignTacoController {
     
-    private final IngredientRepository ingredientRepo;
+    private final IngredientRepository ingredientRepository;
 
-    private TacoRepository tacoRepo;
+    private TacoRepository tacoRepository;
 
-    private UserRepository userRepo;
+    private UserRepository userRepository;
 
-    @Autowired
-    public DesignTacoController(IngredientRepository ingredientRepo, TacoRepository tacoRepo, UserRepository userRepo) {
-        this.ingredientRepo = ingredientRepo;
-        this.tacoRepo = tacoRepo;
-        this.userRepo = userRepo;
+    public DesignTacoController(IngredientRepository ingredientRepository, 
+            TacoRepository tacoRepository, UserRepository userRepository) {
+        this.ingredientRepository = ingredientRepository;
+        this.tacoRepository = tacoRepository;
+        this.userRepository = userRepository;
     }
 
     @ModelAttribute
     public void addIngredientsToModel(Model model) {
         List<Ingredient> ingredients = new ArrayList<>();
-        ingredientRepo.findAll().forEach(i -> ingredients.add(i));
+        ingredientRepository.findAll().forEach(i -> ingredients.add(i));
 
         Type[] types = Ingredient.Type.values();
         for (Type type : types) {
@@ -60,8 +59,8 @@ public class DesignTacoController {
     }
 
     @ModelAttribute(name = "order")
-    public TacoOrder order() {
-        return new TacoOrder();
+    public Order order() {
+        return new Order();
     }
 
     @ModelAttribute(name = "taco")
@@ -72,7 +71,7 @@ public class DesignTacoController {
     @ModelAttribute(name = "user")
     public User user(Principal principal) {
         String username = principal.getName();
-        User user = userRepo.findByUsername(username);
+        User user = userRepository.findByUsername(username);
         return user;
     }
 
@@ -82,16 +81,16 @@ public class DesignTacoController {
     }
 
     @PostMapping
-    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute TacoOrder order) {
-        log.info("   --- Saving taco");
+    public String processTaco(@Valid Taco taco, Errors errors, @ModelAttribute Order order) {
+        log.info("--- Saving taco ---");
 
         if (errors.hasErrors()) {
             return "design";
         }
 
-        Taco saved = tacoRepo.save(taco);
+        Taco saved = tacoRepository.save(taco);
         order.addTaco(saved);
-
+        
         return "redirect:/orders/current";
     }
 

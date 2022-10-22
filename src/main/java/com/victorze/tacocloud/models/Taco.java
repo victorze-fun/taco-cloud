@@ -35,7 +35,7 @@ public class Taco {
     private List<Ingredient> ingredients;
     
     @ManyToOne(cascade=CascadeType.ALL)
-    private TacoOrder order;
+    private Order order;
 
     @PrePersist
     void createdAt() {

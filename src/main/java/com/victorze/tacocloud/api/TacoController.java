@@ -3,7 +3,7 @@ package com.victorze.tacocloud.api;
 import java.util.Optional;
 
 import com.victorze.tacocloud.models.Taco;
-import com.victorze.tacocloud.models.TacoOrder;
+import com.victorze.tacocloud.models.Order;
 import com.victorze.tacocloud.repositories.OrderRepository;
 import com.victorze.tacocloud.repositories.TacoRepository;
 
@@ -59,14 +59,14 @@ public class TacoController {
     }
 
     @PutMapping(path = "/{orderId}", consumes = "application/json")
-    public TacoOrder putOrder(@PathVariable("orderId") Long orderId, @RequestBody TacoOrder order) {
+    public Order putOrder(@PathVariable("orderId") Long orderId, @RequestBody Order order) {
         order.setId(orderId);
         return orderRepo.save(order);
     }
 
     @PatchMapping(path = "/{orderId}", consumes = "application/json")
-    public TacoOrder patchOrder(@PathVariable("orderId") Long orderId, @RequestBody TacoOrder patch) {
-        TacoOrder order = orderRepo.findById(orderId).get();
+    public Order patchOrder(@PathVariable("orderId") Long orderId, @RequestBody Order patch) {
+        Order order = orderRepo.findById(orderId).get();
 
         if (patch.getDeliveryName() != null) {
             order.setDeliveryName(patch.getDeliveryName());

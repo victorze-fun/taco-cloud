@@ -2,6 +2,12 @@ package com.victorze.tacocloud.config;
 
 import java.util.Arrays;
 
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
 import com.victorze.tacocloud.models.Ingredient;
 import com.victorze.tacocloud.models.Ingredient.Type;
 import com.victorze.tacocloud.models.Taco;
@@ -9,12 +15,6 @@ import com.victorze.tacocloud.models.User;
 import com.victorze.tacocloud.repositories.IngredientRepository;
 import com.victorze.tacocloud.repositories.TacoRepository;
 import com.victorze.tacocloud.repositories.UserRepository;
-
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Profile("!prod")
 @Configuration
@@ -44,7 +44,7 @@ public class DevelopmentConfig {
             repo.save(jack);
             repo.save(salsa);
             repo.save(sourCream);
-
+            
             userRepo.save(new User("victorze", encoder.encode("secret"),
                     "Victor Ze", "123 North Street", "Cross Roads", "TX",
                     "76227", "123-123-1234"));
