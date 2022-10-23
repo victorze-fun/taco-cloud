@@ -36,6 +36,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
+                .csrf().disable()
                 .authorizeRequests()
                     .mvcMatchers("/design", "/orders").hasRole("USER")
                     .anyRequest().permitAll()
@@ -45,6 +46,8 @@ public class SecurityConfig {
                 .and()
                     .logout()
                         .logoutSuccessUrl("/")
+                .and()
+                    .csrf().ignoringAntMatchers("/data-api/**", "/api/**")
                 .and()
                 .build();
     }
